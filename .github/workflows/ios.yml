@@ -1,0 +1,20 @@
+name: Build iPhone IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['ryadom-ios/**']
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install xcodegen
+      - run: bash ryadom-ios/build-ipa.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ryadom-iPhone-unsigned
+          path: ryadom-ios/out/Ryadom-unsigned.ipa
+          if-no-files-found: error
