@@ -1,0 +1,24 @@
+name: Ryadom
+options:
+  deploymentTarget:
+    iOS: '16.0'
+targets:
+  Ryadom:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+      - path: Web
+        type: folder
+      - Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ryadom.duo.ios
+        PRODUCT_NAME: Ryadom
+        INFOPLIST_KEY_CFBundleDisplayName: Рядом
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        GENERATE_INFOPLIST_FILE: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: '1.10.1'
+        CURRENT_PROJECT_VERSION: '1'
+        TARGETED_DEVICE_FAMILY: '1'

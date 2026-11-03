@@ -1,0 +1,396 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Рядом — для двоих</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#faf7f2;color:#302522;font:16px system-ui,sans-serif}header,main,nav{max-width:850px;margin:auto;padding:20px}header,nav,.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}header{border-bottom:1px solid #e9ddd5}.logo{font-size:25px;font-weight:800}.logo span{color:#a74756}button,input,textarea,select{font:inherit}button{cursor:pointer;border:0;border-radius:14px;padding:11px 15px;background:#f2e5dd;color:inherit}button:hover{filter:brightness(.96)}button[aria-pressed=true],.primary{background:#923e50;color:white}nav{justify-content:flex-start;padding-bottom:0}.hero{padding:34px 28px;border-radius:28px;background:linear-gradient(120deg,#652d45,#a34c60);color:#fff5ee;position:relative;overflow:hidden}.hero:after{content:'♡';position:absolute;right:15px;bottom:-100px;font:270px Georgia;color:#ffffff20;pointer-events:none}h1,h2{font-family:Georgia,serif;font-weight:normal}h1{font-size:clamp(40px,8vw,66px);margin:8px 0}h2{font-size:29px;margin:6px 0 12px}small,.muted{color:#795f58}.hero small{color:#ffe1d9}.card{background:#fffdf9;border:1px solid #eaded5;border-radius:23px;padding:22px;margin-top:16px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#924153}.moods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:15px 0}.moods button{padding:9px 2px;font-size:11px}.moods b{display:block;font-size:25px}textarea,input,select{width:100%;padding:11px;border:1px solid #ddccc3;background:#fffaf6;border-radius:11px;color:inherit;margin:5px 0 11px}textarea{resize:vertical}.entry{padding:12px 0;border-bottom:1px solid #eee1da;overflow-wrap:anywhere;white-space:pre-wrap}p{line-height:1.5}.foot{text-align:center;margin:23px 0}.answer{white-space:pre-wrap;overflow-wrap:anywhere}@media(max-width:560px){.grid{grid-template-columns:1fr;gap:0}header,main,nav{padding-left:14px;padding-right:14px}nav button{padding:9px 10px}}
+</style>
+<style>
+body{background:#fbf6f0}header{position:sticky;top:0;z-index:2;background:#fbf6f0}.avatar{width:43px;height:43px;border-radius:50%;object-fit:cover;display:inline-grid;place-items:center;background:#f0ddd7;color:#813a52;font-weight:800;vertical-align:middle}.people{display:flex;gap:15px;align-items:center}.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center;margin:12px 0}.calendar button{padding:8px 0;min-height:48px}.calendar small{display:block;line-height:10px}.calendar button[aria-pressed=true] small{color:white}.calendar .dow{font-size:12px;color:#795f58}.split{display:flex;gap:8px;flex-wrap:wrap}.stack{display:grid;gap:8px}.hero p{max-width:420px}.label{margin-bottom:10px}h3{margin:8px 0}.auth{max-width:530px;margin-inline:auto}.result{white-space:pre-wrap;overflow-wrap:anywhere}.status{position:sticky;bottom:12px;background:#fff5e8;border-radius:12px;padding:10px;box-shadow:0 2px 20px #59332322}.status:empty{display:none}.status[data-error=true]{color:#8b2942}.calendar button,.moods button{min-width:0}.footer{margin:26px 0;color:#795f58;font-size:13px}a{color:#923e50}fieldset{border:0;padding:0;margin:0}legend{font-weight:650;margin-bottom:5px}input[type=radio]{width:auto}.choice{display:block;background:#f9eee7;border-radius:10px;margin:6px 0;padding:5px 10px}
+</style>
+<link rel="stylesheet" href="mobile.css">
+<header><div class="logo"><span>♥</span> Рядом</div><button id="profile" hidden>Профиль</button></header>
+<nav id="nav" aria-label="Разделы"></nav><main><div id="view"></div><p id="status" class="status" role="status"></p><footer class="footer">Рядом · пространство для двоих</footer></main>
+<style>.appreciation-photo{display:block;width:min(100%,256px);border-radius:12px}.rose-frame .avatar:first-child{outline:2px solid #e57c9b;box-shadow:0 0 8px #e57c9b}</style>
+<style>
+ :root[data-theme=honey] body:not(.signed) header .logo{color:#fff1e7}.onboard{max-width:520px;margin:auto}.onboard-hero{border-radius:22px;padding:22px;background:#603b34;color:#fff2e4;margin:12px 0 22px}.onboard-hero small{color:#ffdbc0;letter-spacing:.12em;font-weight:800}.onboard-hero h1{font-size:clamp(31px,8vw,46px);line-height:1.05}.onboard-hero p{margin-bottom:0}.onboard-step{min-width:0;border:1px solid var(--line,#ead5c8);background:var(--surface,#fff9f0);border-radius:18px;padding:12px 15px;margin:0 0 14px}.onboard-step legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.onboard-title{display:flex;align-items:center;gap:9px;margin:0 0 14px;font:750 18px/1.25 system-ui;color:var(--ink,#39251f)}.onboard-title span{flex:none;display:inline-grid;place-items:center;width:29px;height:29px;border-radius:50%;background:#a94b38;color:white;font-size:12px}.onboard-options{display:grid;grid-template-columns:1fr 1fr;gap:7px}.onboard-options label{position:relative;cursor:pointer;display:flex;align-items:center;gap:6px;padding:8px;border:1px solid var(--line,#e2c4b4);border-radius:12px;min-height:45px;font-size:13px}.onboard-options label:has(:checked){border-color:var(--plum,#a94b38);background:var(--raised,#ffe7d7)}.onboard-options input{margin:0;accent-color:var(--plum,#a94b38)}.onboard form>.primary{width:100%;min-height:48px}
+ </style>
+<style>
+ .onboard-window{overflow:hidden;touch-action:pan-y}.onboard-track{display:flex;align-items:stretch;transition:transform .28s ease;transform:translateX(calc(var(--slide,0)*-100%))}.onboard-track .onboard-step{flex:0 0 100%;width:100%;margin:0;border-radius:22px;min-height:270px;padding:16px}.onboard-progress{margin:0 0 9px;color:var(--ink,#3f2c23);background:var(--surface,#fff3e9);display:inline-block;padding:5px 10px;border-radius:10px;font-size:13px}.onboard-controls{display:flex;gap:9px}.onboard-controls button{flex:1}.onboard-controls [hidden]{display:none}.onboard-controls button:disabled{opacity:.45}.onboard-dots{display:flex;justify-content:center;gap:6px;margin:12px}.onboard-dots i{width:7px;height:7px;background:#bca495;border-radius:99px}.onboard-dots i.active{width:21px;background:#f4bb9e}.onboard-options label{min-height:62px}
+ .cycle-month{display:flex;align-items:center;justify-content:space-between;margin:12px 0;text-transform:capitalize}.cycle-month button{min-width:42px}.cycle-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}.cycle-grid small{padding-bottom:5px}.cycle-grid .cycle-cell{position:relative;min-width:0;min-height:36px;padding:0;border-radius:50%;box-shadow:none}.cycle-grid .cycle-cell[aria-pressed=true]{outline:2px solid var(--ink,#482c25);outline-offset:1px}.cycle-grid .cycle-cell.phase-none{background:var(--raised,#f4e5db);color:var(--ink,#39251f)}.cycle-today{position:absolute;bottom:3px;left:calc(50% - 2px);width:4px;height:4px;border-radius:50%;background:currentColor}.cycle-grid .phase-period,.cycle-legend .phase-period{background:#ef9db4;color:#521732}.cycle-grid .phase-ovulation,.cycle-legend .phase-ovulation{background:#86d9cf;color:#103b37}.cycle-grid .phase-follicular,.cycle-legend .phase-follicular{background:#c9b6f4;color:#39215a}.cycle-grid .phase-luteal,.cycle-legend .phase-luteal{background:#f4cd9e;color:#533016}.cycle-grid .phase-hidden{background:#ada3af;color:#241b2b}.cycle-legend{display:flex;flex-wrap:wrap;gap:7px 12px;font-size:12px;margin:15px 0}.cycle-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}.cycle-detail{padding-top:12px;border-top:1px solid var(--line,#e5ccbe)}.cycle-detail form{margin-top:8px}@media(prefers-reduced-motion:reduce){.onboard-track{transition:none}}
+ </style>
+<style>.mood-meaning{font-weight:700;color:var(--ink);font-size:13px}.diary-date{margin-top:20px}.diary-item{display:flex;gap:12px;padding:12px;margin:8px 0;border-radius:14px;background:var(--raised,#f5e4da)}.diary-item>span{font-size:22px}.diary-item .result{margin-top:6px}.notifications{margin:0 0 12px}.notifications section{padding:12px;background:var(--surface,#fff8f0);border-radius:12px}.quiz-list{display:grid;gap:8px}.quiz-list button{text-align:left}</style>
+<script>
+const moods=['Радость','Спокойствие','Усталость','Тревога','Грусть','Выгоревший','Влюблённость'];
+const themes={honey:'Карамель',plum:'Сливовая ночь',wine:'Тёмное вино',ink:'Полночь'};
+const themeKey='ryadom-theme';
+document.documentElement.dataset.theme=Object.hasOwn(themes,localStorage.getItem(themeKey))?localStorage.getItem(themeKey):'honey';
+const colors={paper:'Фон',surface:'Карточки',raised:'Поля и вторичные кнопки',ink:'Текст',muted:'Второстепенный текст',plum:'Акцент',line:'Рамки',warm:'Луна и дата'};
+const paletteKey='ryadom-custom-colors';
+let custom={};
+try{custom=JSON.parse(localStorage.getItem(paletteKey))||{}}catch{}
+function applyColors(){
+ const root=document.documentElement;
+ for(const key of Object.keys(colors)){
+  const value=custom[key];
+  if(/^#[0-9a-f]{6}$/i.test(value||''))root.style.setProperty('--'+key,value);
+  else root.style.removeProperty('--'+key);
+ }
+ const accent=getComputedStyle(root).getPropertyValue('--plum').trim();
+ const channels=accent.slice(1).match(/../g).map(x=>parseInt(x,16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);
+ root.style.setProperty('--accent-ink',channels.reduce((sum,x,i)=>sum+x*[.2126,.7152,.0722][i],0)>.179?'#100c15':'#ffffff');
+ const paper=getComputedStyle(root).getPropertyValue('--paper').trim();
+ window.RyadomCloud?.setBars(paper);
+}
+applyColors();
+function themeControls(){
+ const root=document.documentElement,style=getComputedStyle(root);
+ return '<div class="theme-picker">'+Object.entries(themes).map(([key,label])=>'<button type="button" data-action="theme:'+key+'" aria-pressed="'+(root.dataset.theme===key&&!Object.keys(custom).length)+'"><i class="swatch '+key+'"></i>'+label+'</button>').join('')+'</div>'+
+ '<div class="color-grid">'+Object.entries(colors).map(([key,label])=>'<label>'+label+'<input aria-label="'+label+'" type="color" data-color="'+key+'" value="'+style.getPropertyValue('--'+key).trim()+'"></label>').join('')+'</div>'+
+ '<p class="muted">Цвета сохраняются на этом телефоне.</p>'+btn('Сбросить свои цвета','reset-colors');
+}
+const moodIndex=value=>moods.findIndex(m=>value===m||value?.endsWith(' '+m));
+const moodArt=(index,description='')=>'<img class="mood-art" src="art-'+index+'.webp" alt="'+esc(description)+'">';
+const kyivClock=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Kyiv',hour:'2-digit',hourCycle:'h23'});
+const ritualOpen=(now=new Date())=>{const hour=Number(kyivClock.format(now));return hour>=21||hour<3};
+
+const needs=['Просто поделиться','Хочу поговорить','Нужна поддержка','Хочу побыть в тишине'];
+const ideas=['Созвонитесь и приготовьте одинаковый десерт.','Устройте вечер старых фотографий.','Возьмите напитки и прогуляйтесь по новому маршруту.','Обменяйтесь тремя любимыми песнями.'];
+const quizzes=[
+ {title:'Как мы чувствуем заботу',items:[['После трудного дня мне приятнее…','Спокойно поговорить','Получить помощь с делами','Побыть немного в тишине'],['В обычный день я особенно ценю…','Тёплое сообщение','Время вдвоём','Маленький сюрприз'],['Если я расстроен, мне помогает…','Когда меня выслушивают','Когда предлагают решение','Когда спрашивают, что мне нужно']]},
+ {title:'Наше идеальное свидание',items:[['Где хочется побыть вдвоём?','Дома','На природе','В новом месте'],['Как спланировать встречу?','Договориться заранее','Решить по настроению','Сделать друг другу сюрприз'],['Что особенно запоминается?','Долгий разговор','Новое занятие','Маленькая традиция']]},
+ {title:'Как мы слышим друг друга',items:[['Сложный разговор лучше начать…','Когда оба готовы','Коротким сообщением','Прогулкой вдвоём'],['Если разговор накалился, я предпочитаю…','Взять паузу','Сказать, что чувствую','Выслушать до конца'],['После ссоры мне важнее…','Понять чувства друг друга','Договориться, что делать дальше','Восстановить тепло между нами']]},{"title": "На расстоянии", "items": [["Что сближает на расстоянии?", "Созвон", "Фото дня", "Совместная игра"], ["Когда удобнее быть на связи?", "Утром", "Днём", "Вечером"], ["Как пережить разлуку?", "Планировать встречу", "Чаще переписываться", "Оставлять друг другу время"]]},{"title": "Свидание мечты", "items": [["Куда пойдём?", "На природу", "В кино", "В новое кафе"], ["Какой темп?", "Спокойный", "Активный", "Спонтанный"], ["Что останется на память?", "Фото", "Сувенир", "История"]]},{"title": "Границы", "items": [["Как попросить время на себя?", "Сказать прямо", "Написать", "Договориться заранее"], ["Как обсуждать сложное?", "Лично", "По телефону", "В переписке"], ["Что помогает успокоиться?", "Пауза", "Прогулка", "Объятия"]]},{"title": "Будущее", "items": [["Что важнее запланировать?", "Встречу", "Поездку", "Общую цель"], ["Как принимать решения?", "Обсудить вместе", "Собрать варианты", "Дать себе время"], ["Как отмечать успех?", "Устроить вечер", "Сделать фото", "Рассказать друг другу"]]},{"title": "Быт и привычки", "items": [["Как провести выходной?", "Дома", "На прогулке", "В гостях"], ["Как делить дела?", "По очереди", "По предпочтениям", "По свободному времени"], ["Какой ритуал начать?", "Завтрак", "Вечерний звонок", "Список благодарностей"]]}
+];
+const nav=document.querySelector('#nav'), view=document.querySelector('#view'), profile=document.querySelector('#profile'), status=document.querySelector('#status');
+const tabs=['Сегодня','Календарь','Разговоры','Дневник','Профиль'];
+const icons=['<path d="M3 10.5 12 3l9 7.5V21H3z M9 21v-7h6v7"/>','<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 10h18"/>','<path d="M20 15a3 3 0 0 1-3 3H9l-5 3v-5a3 3 0 0 1-1-2V7a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3z M7 9h9m-9 4h6"/>','<path d="M5 3h12a2 2 0 0 1 2 2v16H6a2 2 0 0 1-2-2V5a2 2 0 0 1 1-2z M4 17h15m-11-9h7m-7 4h5"/>','<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>'];
+let state,tab=0,mode='register',date,month,edit=null,idea=0,quiz=0,busy=false;
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const field=(label,name,value='',extra='')=>'<label>'+label+'<input name="'+name+'" value="'+esc(value)+'" '+extra+'></label>';
+const area=(label,name,value='',max=400)=>'<label>'+label+'<textarea name="'+name+'" maxlength="'+max+'">'+esc(value)+'</textarea></label>';
+const btn=(label,action,cls='')=>'<button type="button" class="'+cls+'" data-action="'+action+'">'+label+'</button>';
+const card=(tag,title,body)=>'<section class="card"><div class="eyebrow">'+tag+'</div><h2>'+title+'</h2>'+body+'</section>';
+const form=(name,body,label='Сохранить')=>'<form data-form="'+name+'">'+body+'<button class="primary">'+label+'</button></form>';
+const fmt=s=>new Date(s+'T12:00:00Z').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'});
+const avatar=p=>p?.avatar?'<img class="avatar" alt="" src="'+esc(p.avatar)+'">':'<span class="avatar">'+esc(p?.name?.[0]||'♡')+'</span>';
+const person=id=>id===state.me.id?state.me:state.partner;
+const mine=(kind,day=state.day)=>state.entries.find(r=>r.kind===kind&&r.day===day&&r.author===state.me.id)?.data||{};
+const dayIndex=()=>Math.floor(Date.parse(state.day)/86400000);
+function msg(text='',error=false){status.textContent=text;status.dataset.error=error}
+let sequence=0;
+const pending=new Map();
+window.cloudReply=(id,reply)=>{
+ const task=pending.get(id);
+ if(!task)return;
+ pending.delete(id);
+ if(reply.status>=400)task.reject(Object.assign(new Error(reply.error),{code:reply.status}));
+ else task.resolve(reply);
+};
+const api=(path,data)=>new Promise((resolve,reject)=>{
+ const id=++sequence;
+ pending.set(id,{resolve,reject});
+ RyadomCloud.request(id,path,data===undefined?null:JSON.stringify(data));
+});
+async function load(){
+ try{state=await api('state');extrasData=state.wallet?await api('extras'):null;appreciation=state.wallet&&state.partner?(await api('appreciation')).items:[];date??=state.day;month??=date.slice(0,7)}
+ catch(e){if(e.code!==401)throw e;state=null}
+ render();
+}
+let onboardStep=0, swipeStart=null;
+function moveOnboard(next){
+ const deck=view.querySelector('.onboard-deck');
+ if(!deck||next<0||next>3)return;
+ const slides=[...deck.querySelectorAll('.onboard-step')];
+ if(next>onboardStep){
+  const invalid=[...slides[onboardStep].elements].find(input=>!input.validity.valid);
+  if(invalid){invalid.reportValidity();return}
+ }
+ onboardStep=next;
+ deck.style.setProperty('--slide',next);
+ deck.querySelector('.onboard-progress').textContent='Шаг '+(next+1)+' из 4';
+ deck.querySelectorAll('.onboard-dots i').forEach((dot,i)=>dot.classList.toggle('active',i===next));
+ slides.forEach((slide,i)=>{slide.inert=i!==next;slide.setAttribute('aria-hidden',String(i!==next))});
+ deck.querySelector('[data-action="onboard-back"]').disabled=next===0;
+ deck.querySelector('[data-action="onboard-next"]').hidden=next===3;
+ deck.querySelector('button[type="submit"]').hidden=next!==3;
+}
+view.addEventListener('touchstart',e=>{
+ if(e.target.closest('.onboard-window'))swipeStart=[e.touches[0].clientX,e.touches[0].clientY];
+},{passive:true});
+view.addEventListener('touchcancel',()=>{swipeStart=null});
+view.addEventListener('touchend',e=>{
+ if(!swipeStart)return;
+ const [x,y]=swipeStart;swipeStart=null;
+ const dx=e.changedTouches[0].clientX-x,dy=e.changedTouches[0].clientY-y;
+ if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)moveOnboard(onboardStep+(dx<0?1:-1));
+},{passive:true});
+function auth(){
+ const login=field('Логин','login','','required minlength="3" maxlength="40" autocomplete="username" autocapitalize="none"')+
+ field('Пароль','password','','type="password" required minlength="8" maxlength="128" autocomplete="'+(mode==='login'?'current-password':'new-password')+'"');
+ const step=(number,title,content)=>'<fieldset class="onboard-step"><legend>'+title+'</legend><h2 class="onboard-title" aria-hidden="true"><span>'+number+'</span>'+title+'</h2>'+content+'</fieldset>';
+ const options=(name,items)=>'<div class="onboard-options">'+items.map(([value,label])=>'<label><input required type="radio" name="'+name+'" value="'+value+'"><span>'+label+'</span></label>').join('')+'</div>';
+ const body=mode==='login'?step('♥','Войти в «Рядом»',login):
+ step('01','Твой профиль',field('Имя','name','','required maxlength="32" autocomplete="nickname"')+login)+
+ step('02','Твой пол',options('gender',[['female','Женский'],['male','Мужской'],['other','Другой'],['skip','Не указывать']]))+
+ step('03','Как вы сейчас?',options('relationship',[['new','Недавно вместе'],['together','Давно вместе'],['distance','На расстоянии'],['skip','Пропустить']]))+
+ step('04','Что хочется делать вместе?',options('goal',[['care','Заботиться друг о друге'],['memories','Сохранять моменты'],['plans','Строить планы'],['skip','Пропустить']]));
+ const controls='<div class="onboard-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="onboard-controls">'+btn('← Назад','onboard-back')+btn('Далее →','onboard-next','primary')+'<button type="submit" class="primary" hidden>Создать аккаунт</button></div>';
+ return '<div class="onboard"><section class="onboard-hero"><small>ПРОСТРАНСТВО ДЛЯ ДВОИХ</small><h1>'+(mode==='login'?'С возвращением':'Давайте знакомиться')+'</h1></section>'+
+ (mode==='login'?form(mode,body,'Войти'):'<form data-form="register" class="onboard-deck" novalidate><div class="onboard-progress" aria-live="polite"></div><div class="onboard-window"><div class="onboard-track">'+body+'</div></div>'+controls+'</form>')+
+ '<p>'+btn(mode==='login'?'Создать аккаунт':'Уже есть аккаунт','mode')+'</p></div>';
+}
+function replies(kind,transform,day=state.day){
+ const rows=state.entries.filter(x=>x.kind===kind&&x.day===day);
+ if(rows.length===2)return rows.map(x=>'<div class="entry"><strong>'+esc(person(x.author).name)+'</strong><div class="result">'+transform(x.data)+'</div></div>').join('');
+ return '<p class="muted">'+(state.waiting.includes(kind+'/'+day)?'Партнёр уже ответил. Добавь свой ответ, чтобы увидеть его.':rows.length?'Твой ответ сохранён. Ответ партнёра появится здесь.':'Ответы откроются после того, как вы оба ответите.')+'</p>';
+}
+function today(){
+ const m=mine('mood'),current=moodIndex(m.value);
+ const picker='<fieldset><legend class="sr-only">Настроение</legend><div class="mood-picker">'+moods.map((label,i)=>
+  '<label class="mood-option"><input type="radio" name="value" value="'+label+'" required '+(i===current?'checked':'')+'>'+moodArt(i)+'<span class="mood-caption">'+label+'</span></label>'
+ ).join('')+'</div></fieldset>';
+ const people=[state.me,state.partner].map((p,n)=>{
+  const item=p&&state.entries.find(x=>x.kind==='mood'&&x.author===p.id&&x.day===state.day),i=moodIndex(item?.data.value);
+  return '<div class="pair-mood"><strong>'+esc(p?.name||'Партнёр')+'</strong>'+moodArt(i>=0?i:8,'')+(i>=0?'<small class="mood-meaning">'+moods[i]+'</small>':'')+
+   (i<0?'<small>'+(p?'Пока без отметки':'Ещё не подключён')+'</small>':'')+'</div>';
+ }).join('');
+ return '<section class="pair-panel"><div class="panel-top"><div><div class="eyebrow">Пространство для двоих</div><h2>Сегодня у вас</h2></div><small>'+fmt(state.day)+'</small></div><div class="pair-moods">'+people+'</div>'+
+ (!state.partner?'<button type="button" data-action="tab4" class="pair-link">Подключить партнёра <span aria-hidden="true">↗</span></button>':'')+'</section>'+
+ '<section class="mood-section"><div class="panel-top"><div><div class="eyebrow">Твоя отметка</div><h1>Как ты сегодня?</h1></div></div>'+
+ form('mood',picker+'<details class="mood-details"><summary>Добавить подробности</summary><label>Что тебе нужно?<select name="need">'+needs.map(x=>'<option '+(x===m.need?'selected':'')+'>'+x+'</option>').join('')+'</select></label>'+area('Заметка','note',m.note,280)+'</details>','Поделиться настроением')+'</section>'+ritual();
+}
+function ritual(){
+ const open=ritualOpen(),day=state.day,r=mine('ritual',day);
+ const fields=ritualFields(r);
+ return '<section class="ritual '+(open?'is-open':'is-locked')+'"><div class="ritual-illustration">'+moodArt(7)+'</div><div class="eyebrow">21:00 — 03:00 · Киев</div><h2>Вечерний ритуал</h2>'+
+ (open?'<p>Остановись на минуту и вспомни, каким был этот день.</p>'+form('ritual',fields,'Сохранить итоги')+replies('ritual',d=>ritualSummary(d),day):'<p>Откроется в 21:00.</p>')+'</section>';
+}
+function calendar(){
+ const first=new Date(month+'-01T12:00:00Z'),y=first.getUTCFullYear(),m=first.getUTCMonth();
+ const count=new Date(Date.UTC(y,m+1,0)).getUTCDate(),pad=(first.getUTCDay()+6)%7;
+ const entries=state.entries.filter(x=>x.kind==='plan'||x.kind==='date');
+ const selected=entries.find(x=>x.id===edit);
+ const title=first.toLocaleDateString('ru-RU',{month:'long',year:'numeric',timeZone:'UTC'});
+ const cells=Array.from({length:count},(_,i)=>{const d=month+'-'+String(i+1).padStart(2,'0'),n=entries.filter(x=>x.day===d).length;return '<button data-action="day:'+d+'" aria-pressed="'+(d===date)+'" aria-label="'+fmt(d)+(n?', записей '+n:'')+'">'+(i+1)+(n?'<small>● '+n+'</small>':'')+'</button>'}).join('');
+ return card('Наш календарь','<span style="text-transform:capitalize">'+title+'</span>','<div class="split">'+btn('← Месяц','prev')+btn('Сегодня','current')+btn('Месяц →','next')+'</div><div class="calendar">'+['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>'<span class="dow">'+x+'</span>').join('')+'<span></span>'.repeat(pad)+cells+'</div>')+
+ card('Планы и важные даты',fmt(date),entries.filter(x=>x.day===date).map(x=>'<div class="entry"><strong>'+(x.kind==='date'?'♥ ':x.data.done==='true'?'✓ ':'')+esc(x.data.title)+'</strong><div>'+esc([x.data.time,x.data.note].filter(Boolean).join(' · '))+'</div><div class="split">'+btn('Изменить','edit:'+x.id)+(x.kind==='plan'?btn(x.data.done==='true'?'Вернуть в планы':'Готово','done:'+x.id):'')+btn('Удалить','remove:'+x.id)+'</div></div>').join('')+'<h3>'+(selected?'Редактировать запись':'Добавить запись')+'</h3>'+form('calendar','<label>Тип<select name="kind" '+(selected?'disabled':'')+'><option value="plan">План</option><option value="date" '+(selected?.kind==='date'?'selected':'')+'>Важная дата</option></select></label>'+field('Название','title',selected?.data.title,'required maxlength="160"')+field('Дата','day',selected?.day||date,'type="date" required')+field('Время плана','time',selected?.data.time,'type="time"')+area('Заметка','note',selected?.data.note,300))+(selected?'<p>'+btn('Отменить редактирование','cancel')+'</p>':''))+
+ card('Идея для встречи','Время вместе','<p>'+ideas[idea]+'</p><div class="split">'+btn('Другая идея','idea')+btn('В планы на выбранную дату','addidea','primary')+'</div>')+
+ card('Ближайшие события','Впереди',entries.filter(x=>x.day>=state.day&&x.data.done!=='true').sort((a,b)=>a.day.localeCompare(b.day)).slice(0,8).map(x=>'<div class="entry">'+btn(fmt(x.day),'day:'+x.day)+' '+esc(x.data.title)+'</div>').join('')||'<p class="muted">Добавь первый план или важную дату.</p>');
+}
+let extrasData=null;
+let appreciation=[];
+const phases={period:'Менструация',ovulation:'Овуляция',follicular:'Фолликулярная фаза',luteal:'Лютеиновая фаза'};
+function appreciationCard(){
+ if(!state.partner)return '';
+ const sent=appreciation.some(x=>x.sender===state.me.id&&x.day===state.day);
+ const upload=sent?'<p>На сегодня фото уже отправлено.</p>':form('appreciation',field('Что ты сделал(а)?','note','','required maxlength="180"')+'<label>Фото<input type="file" name="photo" accept="image/*" required></label>','Отправить партнёру');
+ return card('Монеты от приложения','Поступок дня','<p>Покажи, что ты сделал(а). Партнёр может оценить поступок и назначить до 50 монет от приложения.</p>'+upload+
+ appreciation.map(x=>'<div class="entry"><small>'+fmt(x.day)+' · '+(x.sender===state.me.id?'Твой поступок':'Поступок партнёра')+'</small><p>'+esc(x.note)+'</p><img class="appreciation-photo" src="'+esc(x.photo)+'" alt="Фото поступка">'+(x.score!==null?'<p>Начислено: '+x.score+'</p>':x.sender===state.me.id?'<p>Ждёт оценки.</p>':form('appreciation-review','<input type="hidden" name="id" value="'+esc(x.id)+'">'+field('Монеты от приложения','score','25','type="number" min="0" max="50" step="1" required'),'Оценить'))+'</div>').join(''));
+}
+function extras(){
+ const x=extrasData;if(!x)return card('Для пары','Монеты и подарки','<p>Загружаем данные…</p>');
+ const frame=x.frames.some(f=>f.actor===state.me.id);
+ const action=(label,key)=>btn(label,'reward:'+key);
+ const gifts={flower:'🌷 Тюльпан',heart:'💝 Сердце'};
+ return appreciationCard()+card('Ежедневные награды','Монеты: '+x.coins,'<p>Настроение +10, вечерний ритуал +15. Каждое действие засчитывается раз в день.</p>')+
+ card('Внешний вид','Рамка аватара',frame?'<p>Розовая рамка активна.</p>':action('Розовая рамка · 40','frame/rose'))+
+ card('Для партнёра','Подарки',state.partner?action('🌷 Тюльпан · 20','gift/flower')+' '+action('💝 Сердце · 30','gift/heart')+(x.gifts.map(g=>'<p>'+gifts[g.item]+' · '+fmt(g.day)+'</p>').join('')):'<p>Подключи партнёра, чтобы отправлять подарки.</p>')+
+ card('Для двоих','Питомец',!state.partner?'<p>Подключи партнёра.</p>':!x.pet?.adopted?action('🦊 Приютить лисёнка · 60','pet/fox'):'<p>🦊 Лисёнок · уровень '+(1+Math.floor(((x.pet.food||0)+(x.pet.toys||0))/5))+'</p><p>Кормлений: '+x.pet.food+' · игр: '+x.pet.toys+'</p>'+action('Ягоды · 10','food/berry')+' '+action('Мячик · 15','toy/ball'))+
+ cycleCalendar(x);
+}
+let cycleDate,cyclePartner=false;
+function cycleCalendar(x){
+ cycleDate??=state.day;
+ const first=new Date(cycleDate.slice(0,7)+'-01T12:00:00Z');
+ const y=first.getUTCFullYear(),m=first.getUTCMonth(),pad=(first.getUTCDay()+6)%7;
+ const monthLabel=first.toLocaleDateString('ru-RU',{month:'long',year:'numeric',timeZone:'UTC'});
+ const days=cyclePartner?x.sharedDays:x.own,records=new Map(days.map(d=>[d.day,d]));
+ const selected=records.get(cycleDate);
+ const cells=Array.from({length:new Date(Date.UTC(y,m+1,0)).getUTCDate()},(_,i)=>{
+  const d=first.toISOString().slice(0,7)+'-'+String(i+1).padStart(2,'0'),r=records.get(d);
+  const phase=r?(r.phase||'hidden'):'none';
+  return '<button type="button" class="cycle-cell phase-'+phase+'" data-action="cycle-date:'+d+'" aria-pressed="'+(d===cycleDate)+'" aria-label="'+fmt(d)+(r?', '+(phases[r.phase]||'скрытая фаза'):'')+'">'+(i+1)+(d===state.day?'<span class="cycle-today"></span>':'')+'</button>';
+ }).join('');
+ const legend='<div class="cycle-legend">'+Object.entries(phases).map(([key,label])=>'<span><i class="phase-'+key+'"></i>'+label+'</span>').join('')+'</div>';
+ const editor=form('cycle','<input type="hidden" name="day" value="'+cycleDate+'"><label>Фаза<select name="phase">'+Object.entries(phases).map(([k,v])=>'<option value="'+k+'" '+(selected?.phase===k?'selected':'')+'>'+v+'</option>').join('')+'</select></label>'+(state.partner?'<label><input type="checkbox" name="shared" '+(selected?.shared?'checked':'')+'> Поделиться этим днём с партнёром</label>':''),'Сохранить день');
+ const details=cyclePartner?(selected?(selected.phase?'<p>'+phases[selected.phase]+'</p>':btn('Открыть фазу · 15 монет','reward:cycle/day/'+cycleDate)):'<p>На этот день нет открытых для тебя записей.</p>'):editor+(selected?btn('Удалить запись','cycle-delete:'+cycleDate):'');
+ return card('Личный календарь','Цикл','<div class="split">'+btn('Мой цикл','cycle-view:own')+(state.partner?btn('Цикл партнёра','cycle-view:partner'):'')+'</div><div class="cycle-month">'+btn('‹','cycle-month:-1')+'<strong>'+monthLabel+'</strong>'+btn('›','cycle-month:1')+'</div>'+
+ '<div class="cycle-grid">'+['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(x=>'<small>'+x+'</small>').join('')+'<span></span>'.repeat(pad)+cells+'</div>'+legend+
+ '<div class="cycle-detail"><strong>'+fmt(cycleDate)+'</strong>'+details+'</div><p class="muted">Записи скрыты, пока ты не поделишься ими. Для отзыва доступа открой день, сними отметку и сохрани.</p>');
+
+}
+let quizOpen=false;
+function conversations(){
+
+ const test=quizzes[quiz],kind='quiz'+quiz,old=mine(kind).answers?.split(',')||[];
+ const results=replies(kind,d=>test.items.map(([label,...options],i)=>esc(label+' '+(options[Number(d.answers.split(',')[i])]||''))).join('\n'));
+ if(!quizOpen)return card('Квизы для пар','Выбери тему','<div class="quiz-list">'+quizzes.map((x,i)=>btn(x.title+' →','quiz:'+i)).join('')+'</div>');
+ return card('Квизы для пар',test.title,btn('← Все темы','quiz-list')+form('quiz',test.items.map(([label,...options],i)=>'<fieldset><legend>'+label+'</legend>'+options.map((x,j)=>'<label class="choice"><input type="radio" name="q'+i+'" value="'+j+'" required '+(old[i]===String(j)?'checked':'')+'> '+x+'</label>').join('')+'</fieldset>').join(''),'Сохранить ответы')+results+'<p class="muted">Обсудите один ответ, который вас удивил.</p>')+
+ card('Практика общения','Пять минут слушать','<p>Один рассказывает, что у него на уме. Второй пересказывает услышанное своими словами и спрашивает: «Я правильно понял?» Затем поменяйтесь.</p>');
+}
+function ritualFields(r){
+ const select=(label,key,values)=>'<label>'+label+'<select name="'+key+'" required><option value="">Выбрать</option>'+values.map(v=>'<option '+(v===r[key]?'selected':'')+'>'+v+'</option>').join('')+'</select></label>';
+ return select('Как у меня дела?','feeling',['😊 Хорошо','😌 Спокойно','😐 По-разному','😔 Тяжело','😴 Устал(а)'])+
+ select('Что на это повлияло?','influence',['Отношения','Учёба или работа','Самочувствие','Сон и отдых','Другое'])+
+ select('Как дела у '+esc(state.partner?.name||'партнёра')+'?','partnerFeeling',['Хорошо','Спокойно','Непросто','Хочу спросить'])+
+ select('Что мне нужно сейчас?','support',['Поговорить','Побыть рядом','Отдохнуть','Побыть наедине','Поддержка'])+
+ area('Что я думаю на завтра?','tomorrow',r.tomorrow);
+}
+function ritualSummary(d){
+ return [['Самочувствие',d.feeling],['Что повлияло',d.influence],['Как партнёр',d.partnerFeeling],['Что нужно сейчас',d.support],['На завтра',d.tomorrow],['Хорошее',d.good],['Трудное',d.hard]].filter(([,v])=>v).map(([k,v])=>esc(k+': '+v)).join('\n');
+}
+function diary(){
+ const types={mood:['😊','Настроение'],ritual:['🌙','Вечерний ритуал'],plan:['📌','План'],date:['💌','Событие']};
+ const rows=state.entries.filter(x=>Object.hasOwn(types,x.kind));
+ const icons=['😄','😌','😴','😟','😢','🕯️','💗'];
+ let day='';
+ return card('История пары','Дневник',rows.map(x=>{
+  const heading=x.day===day?'':'<h3 class="diary-date">'+fmt(x.day)+'</h3>';day=x.day;
+  const [icon,title]=types[x.kind],d=x.data;
+  const content=x.kind==='ritual'?ritualSummary(d):x.kind==='mood'?esc([d.value,d.need,d.note].filter(Boolean).join('\n')):esc([d.title,d.time,d.note].filter(Boolean).join('\n'));
+  const moodIcon=icons[['Радость','Спокойствие','Усталость','Тревога','Грусть','Выгоревший','Влюблённость'].indexOf(d.value)]||icon;
+  return heading+'<article class="diary-item"><span aria-hidden="true">'+moodIcon+'</span><div><strong>'+title+'</strong> <small>· '+esc(person(x.author)?.name)+'</small><div class="result">'+content+'</div></div></article>';
+ }).join('')||'<p class="muted">Здесь появятся настроения, итоги дня, планы и события.</p>');
+}
+let notificationOpen=false;
+function notifications(){
+ const events=state.activity||[];
+ const key='ryadom-read-'+state.me.id;
+ const seen=Number(localStorage.getItem(key)||0);
+ const unread=events.filter(x=>x.time>seen).length;
+ return '<div class="notifications">'+btn('🔔 Уведомления'+(unread?' · '+unread:''),'notifications')+(notificationOpen?'<section><strong>Действия партнёра</strong>'+events.map(x=>'<p>'+esc(x.label)+' <small>· '+fmt(x.day)+'</small></p>').join('')+(events.length?'':'<p>Пока нет событий.</p>')+'</section>':'')+'</div>';
+}
+function settings(){
+ return extras()+card('Оформление','Тема приложения',themeControls())+card('Твой профиль',avatar(state.me)+' '+esc(state.me.name),form('profile',field('Имя','name',state.me.name,'required maxlength="32"')+'<label>Новая аватарка<input type="file" name="avatar" accept="image/*"></label><label><input type="checkbox" style="width:auto" name="clear"> Удалить аватарку</label><p class="muted">Фото автоматически обрезается до квадрата.</p>'))+
+ card('Пространство пары',state.partner?'Вы в паре':'Пригласить партнёра',state.partner?avatar(state.partner)+' <strong>'+esc(state.partner.name)+'</strong>':'<p>Партнёр регистрируется на своём телефоне и вводит твой код. Код одноразовый и действует сутки.</p>'+btn(state.code?'Создать новый код':'Создать код','invite','primary')+(state.code?'<p><strong>'+esc(state.code.match(/.{1,4}/g).join('-'))+'</strong> '+btn('Скопировать','copy')+'</p>':'')+form('join',field('Код партнёра','code','','required maxlength="25" autocomplete="off"'),'Привязать партнёра'))+
+ '<p>'+btn('Обновить данные пары','refresh')+' '+btn('Выйти из профиля','logout')+'</p>';
+}
+
+function render(){
+ profile.hidden=!state;
+ document.body.classList.toggle('signed',!!state);
+ profile.innerHTML=state?'<span class="profile-stack">'+avatar(state.me)+(state.partner?avatar(state.partner):'')+'</span><span class="profile-names">'+esc(state.me.name)+(state.partner?' <b>&amp;</b> '+esc(state.partner.name):'')+'</span><span class="profile-arrow" aria-hidden="true">⌄</span>':'';
+ profile.setAttribute('aria-label','Профиль');
+ profile.classList.toggle('rose-frame',!!state&&!!extrasData?.frames.some(f=>f.actor===state.me.id));
+ nav.innerHTML=state?tabs.map((t,i)=>'<button data-action="tab'+i+'" aria-pressed="'+(i===tab)+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+icons[i]+'</svg>'+t+'</button>').join(''):'';
+ view.innerHTML=state?notifications()+([today,calendar,conversations,diary,settings][tab]()):auth();
+ if(!state&&mode==='register')moveOnboard(onboardStep);
+}
+async function resize(file){
+ if(!file?.size)return;
+ if(file.size>12000000)throw Error('Выбери фото размером до 12 МБ.');
+ const bmp=await createImageBitmap(file),s=Math.min(bmp.width,bmp.height),canvas=document.createElement('canvas');
+ canvas.width=canvas.height=256;
+ canvas.getContext('2d').drawImage(bmp,(bmp.width-s)/2,(bmp.height-s)/2,s,s,0,0,256,256);
+ bmp.close();
+ return canvas.toDataURL('image/jpeg',.78);
+}
+async function run(fn){
+ if(busy)return;
+ busy=true;msg();
+ try{await fn()}catch(e){msg(e.message||'Что-то пошло не так.',true)}finally{busy=false}
+}
+const entry=(kind,fields,day=state.day,id)=>api('entry',{kind,day,fields,id});
+profile.onclick=()=>{tab=4;render()};
+document.addEventListener('click',e=>{
+ const action=e.target.closest('[data-action]')?.dataset.action;
+ if(!action||busy)return;
+ const [name,value]=action.split(':');
+ if(name==='theme'&&Object.hasOwn(themes,value)||name==='reset-colors'){
+  if(name==='theme'){localStorage.setItem(themeKey,value);document.documentElement.dataset.theme=value}
+  custom={};localStorage.removeItem(paletteKey);applyColors();render();return;
+ }
+ if(name==='onboard-back'||name==='onboard-next'){moveOnboard(onboardStep+(name==='onboard-next'?1:-1));return}
+ if(name==='mode'){onboardStep=0;mode=mode==='login'?'register':'login';msg();render();return}
+ if(/^tab[0-4]$/.test(name)){tab=+name.at(-1);msg();render();return}
+ if(name==='cycle-view'||name==='cycle-date'||name==='cycle-month'){
+  if(name==='cycle-view')cyclePartner=value==='partner';
+  if(name==='cycle-date')cycleDate=value;
+  if(name==='cycle-month'){
+   const next=new Date((cycleDate||state.day).slice(0,7)+'-01T12:00:00Z');
+   next.setUTCMonth(next.getUTCMonth()+Number(value));cycleDate=next.toISOString().slice(0,10);
+  }
+  const top=window.scrollY;render();window.scrollTo(0,top);return;
+ }
+ if(name==='notifications'){
+  notificationOpen=!notificationOpen;
+  if(notificationOpen)localStorage.setItem('ryadom-read-'+state.me.id,String(Math.max(0,...(state.activity||[]).map(x=>x.time))));
+  render();return;
+ }
+ if(name==='day'||name==='current'){date=value||state.day;month=date.slice(0,7);edit=null;render();return}
+ if(name==='prev'||name==='next'){const d=new Date(month+'-01T12:00:00Z');d.setUTCMonth(d.getUTCMonth()+(name==='prev'?-1:1));month=d.toISOString().slice(0,7);date=month+'-01';edit=null;render();return}
+ if(name==='edit'||name==='cancel'){edit=value||null;render();return}
+ if(name==='quiz'){quiz=+value;quizOpen=true;render();return}
+ if(name==='quiz-list'){quizOpen=false;render();return}
+ if(name==='idea'){idea=(idea+1)%ideas.length;render();return}
+ run(async()=>{
+  if(name==='reward'){const [kind,item,day]=value.split('/');if(!confirm('Потратить монеты?'))return;await api('reward',{kind,item,day,nonce:crypto.randomUUID()})}
+  if(name==='cycle-off'||name==='cycle-delete'){const [day,phase]=value.split('/');if(!confirm(name==='cycle-delete'?'Удалить день?':'Отозвать доступ?'))return;await api('cycle',{day,phase:name==='cycle-delete'?'delete':phase,shared:false})}
+  if(name==='copy'){try{await navigator.clipboard.writeText(state.code);msg('Код скопирован.')}catch{msg('Код: '+state.code);}return}
+  if(name==='invite'||name==='logout'){await api(name,{});if(name==='logout'){tab=0;date=month=undefined;edit=null;mode='login'}}
+  if(name==='addidea'&&!state.entries.some(x=>x.kind==='plan'&&x.day===date&&x.data.title===ideas[idea]))await entry('plan',{title:ideas[idea]},date);
+  if(name==='done'){const x=state.entries.find(r=>r.id===value);await entry(x.kind,{...x.data,done:String(x.data.done!=='true')},x.day,x.id)}
+  if(name==='remove'){if(!confirm('Удалить запись из календаря?'))return;await api('remove',{id:value});if(edit===value)edit=null}
+  await load();msg(name==='logout'?'':name==='refresh'?'Данные обновлены.':'Готово.');
+ });
+});
+document.addEventListener('submit',e=>{
+ const name=e.target.dataset.form;if(!name)return;e.preventDefault();
+ if(name==='register'){
+  if(onboardStep<3){moveOnboard(onboardStep+1);return}
+  const invalid=[...e.target.querySelectorAll('input')].find(input=>!input.validity.valid);
+  if(invalid){moveOnboard([...e.target.querySelectorAll('fieldset')].indexOf(invalid.closest('fieldset')));invalid.reportValidity();return}
+ }
+ const f=new FormData(e.target),data=Object.fromEntries(f);
+ run(async()=>{
+  if(name==='appreciation')await api('appreciation',{note:data.note,photo:await resize(f.get('photo'))});
+  else if(name==='appreciation-review')await api('appreciation',{action:'review',id:data.id,score:Number(data.score)});
+  else if(name==='cycle')await api('cycle',{day:data.day,phase:data.phase,shared:data.shared==='on'});
+  else if(name==='register'||name==='login'||name==='join')await api(name,data);
+  else if(name==='profile')await api(name,{name:data.name,avatar:data.clear?'':await resize(f.get('avatar'))});
+  else if(name==='calendar'){
+    const old=state.entries.find(x=>x.id===edit);
+    await entry(old?.kind||data.kind,{...data,done:old?.data.done},data.day,old?.id);
+    date=data.day;month=date.slice(0,7);edit=null;
+  }else if(name==='quiz')await entry('quiz'+quiz,{answers:[data.q0,data.q1,data.q2].join(',')});
+  else if(name==='ritual'){
+   if(!ritualOpen()){render();throw Error('Ритуал доступен с 21:00 до 03:00 по Киеву.')}
+   await entry(name,data,state.day);
+  }else await entry(name,data);
+  await load();msg('Сохранено.');
+ });
+});
+render();
+run(load);
+let syncBusy=false;
+async function sync(){
+ if(!state||busy||syncBusy||document.hidden)return;
+ syncBusy=true;
+ try{
+  const fresh=await api('state');
+  if(busy)return;
+  const typing=view.querySelector('form:focus-within')||view.querySelector('form[data-dirty]');
+  if(typing)return;
+  if(tab===4&&fresh.wallet){
+   const next=await api('extras'),items=fresh.partner?(await api('appreciation')).items:[];
+   if(busy||view.querySelector('form:focus-within,form[data-dirty]'))return;
+   if(JSON.stringify(next)!==JSON.stringify(extrasData)||JSON.stringify(items)!==JSON.stringify(appreciation)){
+    extrasData=next;appreciation=items;state=fresh;render();return;
+   }
+  }
+  if(JSON.stringify(state)!==JSON.stringify(fresh)){state=fresh;render()}
+ }catch(e){if(e.code===401&&!busy){state=null;render()}}
+ finally{syncBusy=false}
+}
+view.addEventListener('input',e=>{
+ const key=e.target.dataset.color;
+ if(Object.hasOwn(colors,key)){
+  custom[key]=e.target.value;localStorage.setItem(paletteKey,JSON.stringify(custom));applyColors();
+  view.querySelectorAll('.theme-picker [aria-pressed]').forEach(b=>b.setAttribute('aria-pressed','false'));
+ }else e.target.closest('form')?.setAttribute('data-dirty','');
+});
+function refreshRitual(){
+ if(!state||tab!==0||busy)return;
+ const section=view.querySelector('.ritual');
+ if(section&&section.classList.contains('is-open')!==ritualOpen())section.outerHTML=ritual();
+}
+setInterval(()=>{refreshRitual();sync()},12000);
+document.addEventListener('visibilitychange',()=>{refreshRitual();sync()});
+</script></html>
